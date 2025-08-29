@@ -5,10 +5,22 @@
 
 /** `
  */
-
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 public class MainUI extends javax.swing.JFrame {
 
@@ -172,12 +184,11 @@ public class MainUI extends javax.swing.JFrame {
                         .addComponent(bt_equipe, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(bt_copiar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bt_abrir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(toolbarLayout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(bt_novo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(toolbarLayout.createSequentialGroup()
+                            .addGap(1, 1, 1)
+                            .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(bt_novo, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bt_abrir, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18))
         );
 
@@ -235,49 +246,134 @@ public class MainUI extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_abrirActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+                StringBuilder content = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+
+                ta_editor.setText(content.toString());
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo: " + e.getMessage());
+            }
+        }
     }//GEN-LAST:event_bt_abrirActionPerformed
 
     private void bt_novoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_novoActionPerformed
-        // TODO add your handling code here:
+        if (!ta_editor.getText().isEmpty()) {
+            int option = JOptionPane.showConfirmDialog(
+                    this,
+                    "Você tem alterações não salvas. Deseja salvar antes de criar um novo arquivo?",
+                    "Salvar alterações?",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (option == JOptionPane.YES_OPTION) {
+                salvarArquivo();
+            } else if (option == JOptionPane.NO_OPTION) {
+                ta_editor.setText("");
+            }
+        } else {
+            ta_editor.setText("");
+        }
     }//GEN-LAST:event_bt_novoActionPerformed
 
     private void bt_salvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_salvarActionPerformed
-        // TODO add your handling code here:
+        salvarArquivo();
     }//GEN-LAST:event_bt_salvarActionPerformed
 
     private void bt_colarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_colarActionPerformed
-        // TODO add your handling code here:
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+        try {
+            String pastedText = (String) clipboard.getData(DataFlavor.stringFlavor);
+
+            ta_editor.insert(pastedText, ta_editor.getCaretPosition());
+
+        } catch (UnsupportedFlavorException | IOException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao colar o conteúdo: " + e.getMessage());
+        }
     }//GEN-LAST:event_bt_colarActionPerformed
 
     private void bt_equipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_equipeActionPerformed
-        // TODO add your handling code here:
         ta_log.setText("Arthur Lopes Muxfeldt, Eduardo Essig, João Pedro Sehnem");
     }//GEN-LAST:event_bt_equipeActionPerformed
 
     private void bt_copiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_copiarActionPerformed
-        // TODO add your handling code here:
+        String selectedText = ta_editor.getSelectedText();
+
+        if (selectedText != null && !selectedText.isEmpty()) {
+            StringSelection stringSelection = new StringSelection(selectedText);
+
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+            clipboard.setContents(stringSelection, null);
+
+            JOptionPane.showMessageDialog(null, "Texto copiado para a área de transferência.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione o texto para copiar.");
+        }
     }//GEN-LAST:event_bt_copiarActionPerformed
 
     private void bt_compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_compilarActionPerformed
-        // TODO add your handling code here:
-
         ta_log.setText("Compilação de programas ainda não foi implementada");
     }//GEN-LAST:event_bt_compilarActionPerformed
 
     private void bt_recortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recortarActionPerformed
-        // TODO add your handling code here:
+        String selectedText = ta_editor.getSelectedText();
+
+        if (selectedText != null && !selectedText.isEmpty()) {
+            StringSelection stringSelection = new StringSelection(selectedText);
+
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+
+            clipboard.setContents(stringSelection, null);
+
+            ta_editor.replaceSelection("");
+
+            JOptionPane.showMessageDialog(null, "Texto recortado e copiado para a área de transferência.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione o texto para recortar.");
+        }
     }//GEN-LAST:event_bt_recortarActionPerformed
 
     private void bt_equipeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bt_equipeKeyPressed
-        // TODO add your handling code here:
         if (evt.getKeyCode() == KeyEvent.VK_F1) {
             bt_equipeActionPerformed(null);
         }
     }//GEN-LAST:event_bt_equipeKeyPressed
+    private void salvarArquivo() {
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showSaveDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                writer.write(ta_editor.getText());
+                JOptionPane.showMessageDialog(null, "Arquivo salvo com sucesso!");
+                ta_editor.setText("");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar o arquivo: " + e.getMessage());
+            }
+        }
+    }
 
     /**
      * @param args the command line arguments
