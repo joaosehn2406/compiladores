@@ -10,6 +10,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.ActionEvent;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
@@ -19,16 +20,131 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 public class MainUI extends javax.swing.JFrame {
+
+    private File currentFile;
 
     /**
      * Creates new form MainUI
      */
     public MainUI() {
         initComponents();
+        configurarAtalhos();
+    }
+
+    private void configurarAtalhos() {
+
+        Action btNovoAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ta_editor.setText("");
+                ta_log.setText("");
+                ta_status.setText("");
+            }
+        };
+        bt_novo.setAction(btNovoAction);
+        bt_novo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/novo.png")));
+        bt_novo.setText("Novo [Ctrl + N]");
+        bt_novo.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "novo");
+        bt_novo.getActionMap().put("novo", btNovoAction);
+
+        Action btAbrirAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_abrirActionPerformed(e);
+            }
+        };
+        bt_abrir.setAction(btAbrirAction);
+        bt_abrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/abrir.png")));
+        bt_abrir.setText("Abrir [Ctrl + O]");
+        bt_abrir.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK), "abrir");
+        bt_abrir.getActionMap().put("abrir", btAbrirAction);
+
+        Action btSalvarAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_salvarActionPerformed(e);
+            }
+        };
+        bt_salvar.setAction(btSalvarAction);
+        bt_salvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/save.png")));
+        bt_salvar.setText("Salvar [Ctrl + S]");
+        bt_salvar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "salvar");
+        bt_salvar.getActionMap().put("salvar", btSalvarAction);
+
+        Action btCopiarAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String selectedText = ta_editor.getSelectedText();
+                if (selectedText != null && !selectedText.isEmpty()) {
+                    StringSelection stringSelection = new StringSelection(selectedText);
+                    Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                    clipboard.setContents(stringSelection, null);
+                    JOptionPane.showMessageDialog(null, "Texto copiado para a área de transferência.");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Selecione o texto para copiar.");
+                }
+            }
+        };
+        bt_copiar.setAction(btCopiarAction);
+        bt_copiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/copiar.png")));
+        bt_copiar.setText("Copiar [Ctrl + C]");
+        bt_copiar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "copiar");
+        bt_copiar.getActionMap().put("copiar", btCopiarAction);
+
+        Action btColarAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_colarActionPerformed(e);
+            }
+        };
+        bt_colar.setAction(btColarAction);
+        bt_colar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/colar.png")));
+        bt_colar.setText("Colar [Ctrl + V]");
+        bt_colar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "colar");
+        bt_colar.getActionMap().put("colar", btColarAction);
+
+        Action btRecortarAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_recortarActionPerformed(e);
+            }
+        };
+        bt_recortar.setAction(btRecortarAction);
+        bt_recortar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recortar.png")));
+        bt_recortar.setText("Recortar [Ctrl + X]");
+        bt_recortar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "recortar");
+        bt_recortar.getActionMap().put("recortar", btRecortarAction);
+
+        Action btCompilarAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_compilarActionPerformed(e);
+            }
+        };
+        bt_compilar.setAction(btCompilarAction);
+        bt_compilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compilar.png")));
+        bt_compilar.setText("Compilar [F7]");
+        bt_compilar.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "compilar");
+        bt_compilar.getActionMap().put("compilar", btCompilarAction);
+
+        Action btEquipeAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_equipeActionPerformed(e);
+            }
+        };
+        bt_equipe.setAction(btEquipeAction);
+        bt_equipe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/equipe.png")));
+        bt_equipe.setText("Equipe [F1]");
+        bt_equipe.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "equipe");
+        bt_equipe.getActionMap().put("equipe", btEquipeAction);
     }
 
     /**
@@ -155,22 +271,22 @@ public class MainUI extends javax.swing.JFrame {
             toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(toolbarLayout.createSequentialGroup()
                 .addGap(13, 13, 13)
-                .addComponent(bt_novo, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_novo, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_abrir, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_abrir, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_salvar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_copiar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_copiar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_colar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_colar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_recortar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_recortar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_compilar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(bt_compilar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_equipe, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(325, Short.MAX_VALUE))
+                .addComponent(bt_equipe, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(261, Short.MAX_VALUE))
         );
         toolbarLayout.setVerticalGroup(
             toolbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,25 +367,24 @@ public class MainUI extends javax.swing.JFrame {
 
     private void bt_abrirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_abrirActionPerformed
         JFileChooser fileChooser = new JFileChooser();
-
         fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-
         int returnValue = fileChooser.showOpenDialog(null);
 
         if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-
-            try (BufferedReader reader = new BufferedReader(new FileReader(selectedFile))) {
+            currentFile = fileChooser.getSelectedFile();
+            try (BufferedReader reader = new BufferedReader(new FileReader(currentFile))) {
                 StringBuilder content = new StringBuilder();
                 String line;
 
                 while ((line = reader.readLine()) != null) {
                     content.append(line).append("\n");
                 }
-
                 ta_editor.setText(content.toString());
+                ta_status.setText(currentFile.getAbsolutePath());
+                ta_log.setText("");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao abrir o arquivo: " + e.getMessage());
+                currentFile = null;
             }
         }
     }//GEN-LAST:event_bt_abrirActionPerformed
@@ -288,9 +403,15 @@ public class MainUI extends javax.swing.JFrame {
                 salvarArquivo();
             } else if (option == JOptionPane.NO_OPTION) {
                 ta_editor.setText("");
+                ta_log.setText("");
+                ta_status.setText("");
+                currentFile = null;
             }
         } else {
             ta_editor.setText("");
+            ta_log.setText("");
+            ta_status.setText("");
+            currentFile = null;
         }
     }//GEN-LAST:event_bt_novoActionPerformed
 
@@ -359,16 +480,33 @@ public class MainUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_bt_equipeKeyPressed
     private void salvarArquivo() {
-        JFileChooser fileChooser = new JFileChooser();
-        int returnValue = fileChooser.showSaveDialog(null);
+        if (currentFile == null) {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            int returnValue = fileChooser.showSaveDialog(null);
 
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                if (!selectedFile.getName().toLowerCase().endsWith(".txt")) {
+                    selectedFile = new File(selectedFile.getAbsolutePath() + ".txt");
+                }
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile))) {
+                    writer.write(ta_editor.getText());
+                    ta_log.setText("");
+                    ta_status.setText(selectedFile.getAbsolutePath());
+                    JOptionPane.showMessageDialog(null, "Arquivo salvo com sucesso!");
+                    currentFile = selectedFile;
+                } catch (IOException e) {
+                    JOptionPane.showMessageDialog(null, "Erro ao salvar o arquivo: " + e.getMessage());
+                }
+            }
+        } else {
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(currentFile))) {
                 writer.write(ta_editor.getText());
+                ta_log.setText("");
                 JOptionPane.showMessageDialog(null, "Arquivo salvo com sucesso!");
-                ta_editor.setText("");
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Erro ao salvar o arquivo: " + e.getMessage());
             }
