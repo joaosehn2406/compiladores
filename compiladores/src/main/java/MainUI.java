@@ -3,8 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 
-/**`
+/** `
  */
+
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+
 public class MainUI extends javax.swing.JFrame {
 
     /**
@@ -94,6 +99,11 @@ public class MainUI extends javax.swing.JFrame {
         bt_equipe.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_equipeActionPerformed(evt);
+            }
+        });
+        bt_equipe.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                bt_equipeKeyPressed(evt);
             }
         });
 
@@ -191,6 +201,7 @@ public class MainUI extends javax.swing.JFrame {
         ta_log.setEditable(false);
         ta_log.setBackground(new java.awt.Color(255, 0, 255));
         ta_log.setColumns(20);
+        ta_log.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         ta_log.setRows(5);
         ta_log.setFocusable(false);
         jScrollPane1.setViewportView(ta_log);
@@ -244,6 +255,7 @@ public class MainUI extends javax.swing.JFrame {
 
     private void bt_equipeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_equipeActionPerformed
         // TODO add your handling code here:
+        ta_log.setText("Arthur Lopes Muxfeldt, Eduardo Essig, João Pedro Sehnem");
     }//GEN-LAST:event_bt_equipeActionPerformed
 
     private void bt_copiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_copiarActionPerformed
@@ -252,11 +264,20 @@ public class MainUI extends javax.swing.JFrame {
 
     private void bt_compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_compilarActionPerformed
         // TODO add your handling code here:
+
+        ta_log.setText("Compilação de programas ainda não foi implementada");
     }//GEN-LAST:event_bt_compilarActionPerformed
 
     private void bt_recortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recortarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_bt_recortarActionPerformed
+
+    private void bt_equipeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bt_equipeKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_F1) {
+            bt_equipeActionPerformed(null);
+        }
+    }//GEN-LAST:event_bt_equipeKeyPressed
 
     /**
      * @param args the command line arguments
