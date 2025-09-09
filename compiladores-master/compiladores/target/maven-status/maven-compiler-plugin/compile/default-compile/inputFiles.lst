@@ -1,2 +1,10 @@
-/home/arthur/NetBeansProjects/compiladores-master/compiladores/src/main/java/MainUI.java
-/home/arthur/NetBeansProjects/compiladores-master/compiladores/src/main/java/NumberedBorder.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/AnalysisError.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/Constants.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/LexicalError.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/Lexico.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/MainUI.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/NumberedBorder.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/ScannerConstants.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/SemanticError.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/SyntaticError.java
+/home/essig/pessoal/new_compiladores/compiladores/compiladores-master/compiladores/src/main/java/Token.java

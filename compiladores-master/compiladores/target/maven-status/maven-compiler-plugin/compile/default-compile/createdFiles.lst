@@ -1,5 +1,10 @@
+ScannerConstants.class
+Lexico.class
+LexicalError.class
+SyntaticError.class
 MainUI$10.class
 MainUI$8.class
+Token.class
 MainUI$15.class
 MainUI$1.class
 MainUI$3.class
@@ -10,12 +15,15 @@ MainUI$5.class
 MainUI$17.class
 MainUI$14.class
 MainUI.class
+Constants.class
 MainUI$7.class
 MainUI$11.class
 MainUI$2.class
 MainUI$16.class
+AnalysisError.class
 MainUI$4.class
 NumberedBorder.class
 MainUI$13.class
+SemanticError.class
 MainUI$9.class
 MainUI$18.class

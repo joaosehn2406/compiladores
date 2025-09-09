@@ -39,81 +39,104 @@ public class MainUI extends javax.swing.JFrame {
     }
 
     private void configurarAtalhos() {
-    bt_novo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/novo.png")));
-    bt_novo.setText("Novo [Ctrl + N]");
+        bt_novo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/novo.png")));
+        bt_novo.setText("Novo [Ctrl + N]");
 
-    bt_abrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/abrir.png")));
-    bt_abrir.setText("Abrir [Ctrl + O]");
+        bt_abrir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/abrir.png")));
+        bt_abrir.setText("Abrir [Ctrl + O]");
 
-    bt_salvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/save.png")));
-    bt_salvar.setText("Salvar [Ctrl + S]");
+        bt_salvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/save.png")));
+        bt_salvar.setText("Salvar [Ctrl + S]");
 
-    bt_copiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/copiar.png")));
-    bt_copiar.setText("Copiar [Ctrl + C]");
+        bt_copiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/copiar.png")));
+        bt_copiar.setText("Copiar [Ctrl + C]");
 
-    bt_colar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/colar.png")));
-    bt_colar.setText("Colar [Ctrl + V]");
+        bt_colar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/colar.png")));
+        bt_colar.setText("Colar [Ctrl + V]");
 
-    bt_recortar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recortar.png")));
-    bt_recortar.setText("Recortar [Ctrl + X]");
+        bt_recortar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/recortar.png")));
+        bt_recortar.setText("Recortar [Ctrl + X]");
 
-    bt_compilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compilar.png")));
-    bt_compilar.setText("Compilar [F7]");
+        bt_compilar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/compilar.png")));
+        bt_compilar.setText("Compilar [F7]");
 
-    bt_equipe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/equipe.png")));
-    bt_equipe.setText("Equipe [F1]");
+        bt_equipe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/equipe.png")));
+        bt_equipe.setText("Equipe [F1]");
 
-    JComponent root = getRootPane();
+        JComponent root = getRootPane();
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "novo");
-    root.getActionMap().put("novo", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_novo.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_N, KeyEvent.CTRL_DOWN_MASK), "novo");
+        root.getActionMap().put("novo", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_novo.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK), "abrir");
-    root.getActionMap().put("abrir", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_abrir.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK), "abrir");
+        root.getActionMap().put("abrir", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_abrir.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "salvar");
-    root.getActionMap().put("salvar", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_salvar.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK), "salvar");
+        root.getActionMap().put("salvar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_salvar.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "copiar");
-    root.getActionMap().put("copiar", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_copiar.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.CTRL_DOWN_MASK), "copiar");
+        root.getActionMap().put("copiar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_copiar.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "colar");
-    root.getActionMap().put("colar", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_colar.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.CTRL_DOWN_MASK), "colar");
+        root.getActionMap().put("colar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_colar.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "recortar");
-    root.getActionMap().put("recortar", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_recortar.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK), "recortar");
+        root.getActionMap().put("recortar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_recortar.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "compilar");
-    root.getActionMap().put("compilar", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_compilar.doClick(); }
-    });
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F7, 0), "compilar");
+        root.getActionMap().put("compilar", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_compilar.doClick();
+            }
+        });
 
-    root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
-        .put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "equipe");
-    root.getActionMap().put("equipe", new AbstractAction() {
-        @Override public void actionPerformed(ActionEvent e) { bt_equipe.doClick(); }
-    });
-}
-
+        root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW)
+                .put(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "equipe");
+        root.getActionMap().put("equipe", new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bt_equipe.doClick();
+            }
+        });
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -429,7 +452,33 @@ public class MainUI extends javax.swing.JFrame {
     }//GEN-LAST:event_bt_copiarActionPerformed
 
     private void bt_compilarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_compilarActionPerformed
-        ta_log.setText("Compilação de programas ainda não foi implementada");
+        Lexico lexico = new Lexico();
+        lexico.setInput(ta_editor.getText());
+        try {
+            Token t = null;
+            while ((t = lexico.nextToken()) != null) {
+                System.out.println(t.getLexeme());
+                ta_log.setText(t.getLexeme());
+
+                // só escreve o lexema, necessário escrever t.getId, t.getPosition()
+                // t.getId () - retorna o identificador da classe (ver Constants.java) 
+                // necessário adaptar, pois deve ser apresentada a classe por extenso
+                // t.getPosition () - retorna a posição inicial do lexema no editor 
+                // necessário adaptar para mostrar a linha	
+                // esse código apresenta os tokens enquanto não ocorrer erro
+                // no entanto, os tokens devem ser apresentados SÓ se não ocorrer erro,
+                // necessário adaptar para atender o que foi solicitado		   
+            }
+        } catch (LexicalError e) {  // tratamento de erros
+            System.out.println(e.getMessage() + " em " + e.getPosition());
+            ta_log.setText(e.getMessage() + " em " + e.getPosition());
+            
+
+            // e.getMessage() - retorna a mensagem de erro de SCANNER_ERRO (ver ScannerConstants.java)
+            // necessário adaptar conforme o enunciado da parte 2
+            // e.getPosition() - retorna a posição inicial do erro 
+            // necessário adaptar para mostrar a linha  
+        }
     }//GEN-LAST:event_bt_compilarActionPerformed
 
     private void bt_recortarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_recortarActionPerformed
@@ -545,8 +594,8 @@ public class MainUI extends javax.swing.JFrame {
 
     private static class ta_editor extends JTextArea {
 
-        public ta_editor() { 
-            
+        public ta_editor() {
+
         }
     }
 }
