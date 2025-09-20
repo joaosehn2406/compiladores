@@ -652,7 +652,7 @@ public class MainUI extends javax.swing.JFrame {
 
             if (c == '}') {
                 if (pilha.isEmpty()) {
-                    return "linha " + linha + ": } comentário inválido ou não finalizado";
+                    return "linha " + linha + ": } símbolo inválido ou comentário não finalizado";
                 }
                 pilha.pop();
             }
