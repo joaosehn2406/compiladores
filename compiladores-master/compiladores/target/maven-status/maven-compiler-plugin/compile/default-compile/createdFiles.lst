@@ -1,9 +1,12 @@
 compiladores/ui/MainUI$14.class
+compiladores/gals/ParserConstants.class
+compiladores/gals/Sintatico.class
 compiladores/ui/MainUI$5.class
 compiladores/gals/Token.class
 compiladores/gals/Lexico.class
 compiladores/ui/MainUI$3.class
 compiladores/gals/SemanticError.class
+compiladores/gals/Semantico.class
 compiladores/gals/LexicalError.class
 compiladores/ui/MainUI$8.class
 compiladores/ui/MainUI$17.class

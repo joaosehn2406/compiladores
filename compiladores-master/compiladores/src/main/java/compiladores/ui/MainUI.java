@@ -15,6 +15,10 @@ import static compiladores.gals.Constants.t_identificador;
 import compiladores.gals.Token;
 import compiladores.gals.LexicalError;
 import compiladores.gals.Lexico;
+import compiladores.gals.SemanticError;
+import compiladores.gals.Semantico;
+import compiladores.gals.Sintatico;
+import compiladores.gals.SyntaticError;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -466,36 +470,62 @@ public class MainUI extends javax.swing.JFrame {
 
         String codigo = ta_editor.getText();
 
+        Lexico lexico = new Lexico();
+        Sintatico sintatico = new Sintatico();
+        Semantico semantico = new Semantico();
+        lexico.setInput(codigo);
+        try {
+            sintatico.parse(lexico, semantico);    
+        } 
+        catch (LexicalError e) {
+
+            int pos = e.getPosition();
+            int linha = getLinhaCompilador(codigo, pos);
+            String simbolo = (pos >= 0 && pos < codigo.length()) ? String.valueOf(codigo.charAt(pos)) : "?";
+            ta_log.setText("linha " + linha + ": " + simbolo + " símbolo inválido");
+
+        } catch (SyntaticError e) {
+            ta_log.setText(e.getMessage() + " em " + e.getPosition());
+
+            // e.getMessage() são os símbolos esperados
+            // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
+            // necessário adaptar conforme o enunciado da parte 3
+            // e.getPosition() - retorna a posição inicial do erro 
+            // necessário adaptar para mostrar a linha
+            // necessário mostrar também o símbolo encontrado 
+        } catch (SemanticError e) {
+            // trata erros semânticos na parte 4
+        }
+
 //        String erroComentario = validarComentariosChaves(codigo);
 //        if (erroComentario != null) {
 //            ta_log.setText(erroComentario);
 //            return;
 //        }
-
-        Lexico lexico = new Lexico(codigo);
-        java.util.ArrayList<String> linhas = new java.util.ArrayList<>();
-
-        try {
-            for (Token t = lexico.nextToken(); t != null; t = lexico.nextToken()) {
-                int linha = getLinhaCompilador(codigo, t.getPosition());
-                String classe = classHelper(t.getId());
-                String lexema = t.getLexeme();
-
-                linhas.add(String.format("%-7s %-20s %s", "linha " + linha, classe, lexema));
-            }
-
-            if (linhas.isEmpty()) {
-                ta_log.setText("\nprograma compilado com sucesso");
-            } else {
-                ta_log.setText(String.join("\n", linhas) + "\nprograma compilado com sucesso");
-            }
-
-        } catch (LexicalError e) {
-            int pos = e.getPosition();
-            int linha = getLinhaCompilador(codigo, pos);
-            String simbolo = (pos >= 0 && pos < codigo.length()) ? String.valueOf(codigo.charAt(pos)) : "?";
-            ta_log.setText("linha " + linha + ": " + simbolo + " símbolo inválido");
-        }
+//        Lexico lexico = new Lexico(codigo);
+//        java.util.ArrayList<String> linhas = new java.util.ArrayList<>();
+//
+//        try {
+//            for (Token t = lexico.nextToken(); t != null; t = lexico.nextToken()) {
+//                int linha = getLinhaCompilador(codigo, t.getPosition());
+//                String classe = classHelper(t.getId());
+//                String lexema = t.getLexeme();
+//
+//                linhas.add(String.format("%-7s %-20s %s", "linha " + linha, classe, lexema));
+//            }
+//
+//            if (linhas.isEmpty()) {
+//                ta_log.setText("\nprograma compilado com sucesso");
+//            } else {
+//                ta_log.setText(String.join("\n", linhas) + "\nprograma compilado com sucesso");
+//            }
+//
+//        } catch (LexicalError e) {
+//            int pos = e.getPosition();
+//            int linha = getLinhaCompilador(codigo, pos);
+//            String simbolo = (pos >= 0 && pos < codigo.length()) ? String.valueOf(codigo.charAt(pos)) : "?";
+//            ta_log.setText("linha " + linha + ": " + simbolo + " símbolo inválido");
+//        }
 
     }//GEN-LAST:event_bt_compilarActionPerformed
 
