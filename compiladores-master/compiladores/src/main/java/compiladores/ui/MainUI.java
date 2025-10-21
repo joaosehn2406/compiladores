@@ -475,22 +475,24 @@ public class MainUI extends javax.swing.JFrame {
         Semantico semantico = new Semantico();
         lexico.setInput(codigo);
         try {
-            sintatico.parse(lexico, semantico);    
+            sintatico.parse(lexico, semantico); 
+            ta_log.setText("programa compilado com sucesso");
         } 
         catch (LexicalError e) {
 
             int pos = e.getPosition();
             int linha = getLinhaCompilador(codigo, pos);
             String simbolo = (pos >= 0 && pos < codigo.length()) ? String.valueOf(codigo.charAt(pos)) : "?";
-            ta_log.setText("linha " + linha + ": " + simbolo + " símbolo inválido");
+            ta_log.setText("linha " + linha + ": " + e.getMessage()  + " inválida");
 
         } catch (SyntaticError e) {
             ta_log.setText(e.getMessage() + " em " + e.getPosition());
 
+            ta_log.setText(e.getMessage());
             // e.getMessage() são os símbolos esperados
             // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
             // necessário adaptar conforme o enunciado da parte 3
-            // e.getPosition() - retorna a posição inicial do erro 
+            // e.getPosition() - retorna a posição inicial do erro .get
             // necessário adaptar para mostrar a linha
             // necessário mostrar também o símbolo encontrado 
         } catch (SemanticError e) {
