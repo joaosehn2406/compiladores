@@ -15,6 +15,7 @@ import static compiladores.gals.Constants.t_identificador;
 import compiladores.gals.Token;
 import compiladores.gals.LexicalError;
 import compiladores.gals.Lexico;
+import compiladores.gals.ParserConstants;
 import compiladores.gals.SemanticError;
 import compiladores.gals.Semantico;
 import compiladores.gals.Sintatico;
@@ -473,61 +474,105 @@ public class MainUI extends javax.swing.JFrame {
         Lexico lexico = new Lexico();
         Sintatico sintatico = new Sintatico();
         Semantico semantico = new Semantico();
+        Token token = null;
         lexico.setInput(codigo);
-        try {
-            sintatico.parse(lexico, semantico); 
-            ta_log.setText("programa compilado com sucesso");
-        } 
-        catch (LexicalError e) {
 
-            int pos = e.getPosition();
-            int linha = getLinhaCompilador(codigo, pos);
-            String simbolo = (pos >= 0 && pos < codigo.length()) ? String.valueOf(codigo.charAt(pos)) : "?";
-            ta_log.setText("linha " + linha + ": " + e.getMessage()  + " inválida");
+        try {
+            sintatico.parse(lexico, semantico);
+            ta_log.setText("programa compilado com sucesso");
+        } catch (LexicalError e) {
+
+            ta_log.setText("linha " + getLinhaCompilador(codigo, e.getPosition()) + ": " + e.getMessage());
 
         } catch (SyntaticError e) {
-            ta_log.setText(e.getMessage() + " em " + e.getPosition());
+            String resultadoEncontrado;
+            String resultadoEsperado = null;
 
-            ta_log.setText(e.getMessage());
-            // e.getMessage() são os símbolos esperados
-            // e.getMessage() - retorna a mensagem de erro de PARSER_ERROR (ver ParserConstants.java)
-            // necessário adaptar conforme o enunciado da parte 3
-            // e.getPosition() - retorna a posição inicial do erro .get
-            // necessário adaptar para mostrar a linha
-            // necessário mostrar também o símbolo encontrado 
+            String codigoFonte = codigo;
+            String mensagemErroSintatico = e.getMessage();
+            String mensagemErroSintaticoLC = mensagemErroSintatico.toLowerCase();
+            int linhaErro = getLinhaCompilador(codigoFonte, e.getPosition());
+            int posElementoErro = -1;
+            lexico.setInput(codigoFonte);
+            while (true) {
+                try {
+                    token = lexico.nextToken();
+                    if (!(token != null && token.getPosition() < e.getPosition())) {
+                        break;
+                    }
+                } catch (LexicalError ex) {
+                }
+            }
+
+            if (token == null || "$".equals(token.getLexeme())) {
+                resultadoEncontrado = "EOF";
+            } else if (token.getId() == Constants.t_constanteString) {
+                resultadoEncontrado = "constante_string";
+            } else {
+                resultadoEncontrado = token.getLexeme();
+            }
+
+            for (int i = 0; i < ParserConstants.PARSER_ERROR.length; i++) {
+                if (ParserConstants.PARSER_ERROR[i] != null && ParserConstants.PARSER_ERROR[i].equals(mensagemErroSintatico)) {
+                    posElementoErro = i;
+                    break;
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            if (posElementoErro >= ParserConstants.FIRST_NON_TERMINAL) {
+                if (mensagemErroSintaticoLC.contains("<programa>")) {
+                    resultadoEsperado = "esperado begin";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_instrucoes>") || mensagemErroSintaticoLC.contains("<lista_de_instrucoes1>")) {
+                    resultadoEsperado = "esperado identificador do list if print read tipo";
+                } else if (mensagemErroSintaticoLC.contains("<tipo>") || mensagemErroSintaticoLC.contains("<tipos>")) {
+                    resultadoEsperado = "esperado tipo";
+                } else if (mensagemErroSintaticoLC.contains("<list_tipo>")) {
+                    resultadoEsperado = "esperado list";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_identificadores>")) {
+                    resultadoEsperado = "esperado identificador";
+                } else if (mensagemErroSintaticoLC.contains("atribuicao") || mensagemErroSintaticoLC.contains("manipulacao")) {
+                    resultadoEsperado = "esperado = <- add delete";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_entrada1>")) {
+                    resultadoEsperado = "esperado , )";
+                } else if (mensagemErroSintaticoLC.matches(".*<(expressao|expressao_|valor|relacional|relacional_|aritmetica|aritmetica_|termo|termo_|fator|fator_)>.*")) {
+                    resultadoEsperado = "esperado expressão";
+                } else {
+                    int linha = posElementoErro - ParserConstants.FIRST_NON_TERMINAL;
+                    if (linha >= 0 && linha < ParserConstants.PARSER_TABLE.length) {
+                        for (int j = 1; j <= ParserConstants.PARSER_TABLE[linha].length; j++) {
+                            if (ParserConstants.PARSER_TABLE[linha][j - 1] != -1) {
+                                String name = nameHelper(j);
+                                if (name == null || name.isEmpty()) {
+                                    if (j < ParserConstants.PARSER_ERROR.length) {
+                                        name = ParserConstants.PARSER_ERROR[j];
+                                    } else {
+                                        name = String.valueOf(j);
+                                    }
+                                }
+                                if (sb.length() > 0) {
+                                    sb.append(" ");
+                                }
+                                sb.append(name);
+                            }
+                        }
+                    }
+                    if (sb.length() > 0) {
+                        resultadoEsperado = "esperado " + sb.toString();
+                    }
+                }
+            } else if (posElementoErro > 0) {
+                resultadoEsperado = mensagemErroSintatico.startsWith("esperado") ? mensagemErroSintatico : ("esperado " + mensagemErroSintatico);
+            }
+
+            if (resultadoEsperado == null || resultadoEsperado.trim().isEmpty()) {
+                resultadoEsperado = "esperado";
+            }
+
+            ta_log.setText("linha " + linhaErro + ": encontrado " + resultadoEncontrado + " " + resultadoEsperado);
         } catch (SemanticError e) {
             // trata erros semânticos na parte 4
         }
-
-//        String erroComentario = validarComentariosChaves(codigo);
-//        if (erroComentario != null) {
-//            ta_log.setText(erroComentario);
-//            return;
-//        }
-//        Lexico lexico = new Lexico(codigo);
-//        java.util.ArrayList<String> linhas = new java.util.ArrayList<>();
-//
-//        try {
-//            for (Token t = lexico.nextToken(); t != null; t = lexico.nextToken()) {
-//                int linha = getLinhaCompilador(codigo, t.getPosition());
-//                String classe = classHelper(t.getId());
-//                String lexema = t.getLexeme();
-//
-//                linhas.add(String.format("%-7s %-20s %s", "linha " + linha, classe, lexema));
-//            }
-//
-//            if (linhas.isEmpty()) {
-//                ta_log.setText("\nprograma compilado com sucesso");
-//            } else {
-//                ta_log.setText(String.join("\n", linhas) + "\nprograma compilado com sucesso");
-//            }
-//
-//        } catch (LexicalError e) {
-//            int pos = e.getPosition();
-//            int linha = getLinhaCompilador(codigo, pos);
-//            String simbolo = (pos >= 0 && pos < codigo.length()) ? String.valueOf(codigo.charAt(pos)) : "?";
-//            ta_log.setText("linha " + linha + ": " + simbolo + " símbolo inválido");
-//        }
 
     }//GEN-LAST:event_bt_compilarActionPerformed
 
@@ -643,6 +688,99 @@ public class MainUI extends javax.swing.JFrame {
         }
 
         return "símbolo não conhecido";
+    }
+
+    private String nameHelper(int constantsId) {
+        switch (constantsId) {
+            case Constants.DOLLAR:
+                return "EOF";
+            case Constants.t_identificador:
+                return "identificador";
+            case Constants.t_constanteInt:
+                return "constante_int";
+            case Constants.t_constanteFloat:
+                return "constante_float";
+            case Constants.t_constanteString:
+                return "constante_string";
+
+            case Constants.t_pr_add:
+                return "add";
+            case Constants.t_pr_and:
+                return "and";
+            case Constants.t_pr_begin:
+                return "begin";
+            case Constants.t_pr_bool:
+                return "bool";
+            case Constants.t_pr_count:
+                return "count";
+            case Constants.t_pr_delete:
+                return "delete";
+            case Constants.t_pr_do:
+                return "do";
+            case Constants.t_pr_elementOf:
+                return "element_of";
+            case Constants.t_pr_else:
+                return "else";
+            case Constants.t_pr_end:
+                return "end";
+            case Constants.t_pr_false:
+                return "false";
+            case Constants.t_pr_float:
+                return "float";
+            case Constants.t_pr_if:
+                return "if";
+            case Constants.t_pr_int:
+                return "int";
+            case Constants.t_pr_list:
+                return "list";
+            case Constants.t_pr_not:
+                return "not";
+            case Constants.t_pr_or:
+                return "or";
+            case Constants.t_pr_print:
+                return "print";
+            case Constants.t_pr_read:
+                return "read";
+            case Constants.t_pr_size:
+                return "size";
+            case Constants.t_pr_string:
+                return "string";
+            case Constants.t_pr_true:
+                return "true";
+            case Constants.t_pr_until:
+                return "until";
+            case Constants.t_TOKEN_29:
+                return "+";
+            case Constants.t_TOKEN_30:
+                return "-";
+            case Constants.t_TOKEN_31:
+                return "*";
+            case Constants.t_TOKEN_32:
+                return "/";
+            case Constants.t_TOKEN_33:
+                return "==";
+            case Constants.t_TOKEN_34:
+                return "~=";
+            case Constants.t_TOKEN_35:
+                return "<";
+            case Constants.t_TOKEN_36:
+                return ">";
+            case Constants.t_TOKEN_37:
+                return "=";
+            case Constants.t_TOKEN_38:
+                return "<-";
+            case Constants.t_TOKEN_39:
+                return "(";
+            case Constants.t_TOKEN_40:
+                return ")";
+            case Constants.t_TOKEN_41:
+                return ";";
+            case Constants.t_TOKEN_42:
+                return ",";
+
+            default:
+                return null;
+        }
     }
 
     private int getLinhaCompilador(String texto, int posicao) {
