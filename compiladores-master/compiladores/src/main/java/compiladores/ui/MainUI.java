@@ -488,12 +488,11 @@ public class MainUI extends javax.swing.JFrame {
             String resultadoEncontrado;
             String resultadoEsperado = null;
 
-            String codigoFonte = codigo;
+            int posElementoErro = -1;
             String mensagemErroSintatico = e.getMessage();
             String mensagemErroSintaticoLC = mensagemErroSintatico.toLowerCase();
-            int linhaErro = getLinhaCompilador(codigoFonte, e.getPosition());
-            int posElementoErro = -1;
-            lexico.setInput(codigoFonte);
+            int linhaErro = getLinhaCompilador(codigo, e.getPosition());
+            lexico.setInput(codigo);
             while (true) {
                 try {
                     token = lexico.nextToken();
@@ -558,7 +557,7 @@ public class MainUI extends javax.swing.JFrame {
                         }
                     }
                     if (sb.length() > 0) {
-                        resultadoEsperado = "esperado " + sb.toString();
+                         resultadoEsperado = "esperado " + sb.toString();
                     }
                 }
             } else if (posElementoErro > 0) {
