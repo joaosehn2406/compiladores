@@ -182,8 +182,8 @@ public interface ParserConstants {
                 "esperado ;",//"Era esperado \";\"",
                 "esperado ,",//"Era esperado \",\"",
                 "esperado begin", //<programa> inválido",
-                "esperado identificador do list if print read tipo", //<lista_de_instrucoes> inválido",
-                "esperado identificador do list if print read tipo", //<instrucao> inválido",
+                "esperado identificador do if print read tipo", //<lista_de_instrucoes> inválido",
+                "esperado identificador do if print read tipo", //<instrucao> inválido",
                 "esperado tipo", //<dec_var> inválido",
                 "esperado identificador do if print read ", //<comando> inválido",
                 "esperado tipo", //<tipo> inválido",
@@ -192,7 +192,7 @@ public interface ParserConstants {
                 "esperado list", //"<list_tipo> inválido",
                 "esperado identificador constante_int constante_float constante_string false not true + - (", // <elemento> inválido
                 "esperado identificador constante_int constante_float constante_string false not true + - (", // <posicao> inválido
-                "esperado (", // <entrada_dados> inválido,
+                "esperado read", // <entrada_dados> inválido,
                 "esperado identificador constante_string", //"<lista_de_entrada> inválido",
                 "esperado identificador constante_string", //"<constante_string> inválido",
                 "esperado print", //"<saida_dados> inválido",
