@@ -7,7 +7,7 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Compact
-Input = String
+Input = Stream
 Parser = LL
 #RegularDefinitions
 mai: [A-z]
@@ -132,9 +132,9 @@ pr_until = identificador: "until"
 <comando1>
 
 #Grammar
-<programa>::= pr_begin <lista_de_instrucoes> pr_end ;
+<programa>::= #100 pr_begin <lista_de_instrucoes> pr_end #101;
 <lista_de_instrucoes>::= <instrucao> ";" <lista_de_instrucoes1> ;
-<lista_de_instrucoes1>::= Ã® | <lista_de_instrucoes> ;
+<lista_de_instrucoes1>::= î | <lista_de_instrucoes> ;
 
 <instrucao>::= <dec_var> | <comando> ;
 <dec_var>::= <tipo> <lista_de_identificadores> ;
@@ -151,7 +151,7 @@ pr_until = identificador: "until"
 <tipos>::= pr_bool | pr_int | pr_float | pr_string ;
 <list_tipo>::= pr_list "(" <tipos> "," constanteInt ")" ;
 <lista_de_identificadores>::= identificador <lista_de_identificadores1> ;
-<lista_de_identificadores1>::= Ã® | "," <lista_de_identificadores> ;
+<lista_de_identificadores1>::= î | "," <lista_de_identificadores> ;
 
 <atribuicao1>::= "=" | "<-" ;
 
@@ -162,36 +162,36 @@ pr_until = identificador: "until"
 
 <entrada_dados>::= pr_read "(" <lista_de_entrada> ")" ;
 <lista_de_entrada>::= <constante_string> identificador <lista_de_entrada1> ;
-<lista_de_entrada1>::= Ã® | "," <lista_de_entrada> ;
-<constante_string>::= constanteString "," | Ã® ;
+<lista_de_entrada1>::= î | "," <lista_de_entrada> ;
+<constante_string>::= constanteString "," | î ;
 
 <saida_dados>::= pr_print "(" <lista_de_expressoes> ")" ;
-<lista_de_expressoes>::= <expressao> <lista_de_expressoes1> ;
-<lista_de_expressoes1>::= Ã® | "," <lista_de_expressoes> ;
+<lista_de_expressoes>::= <expressao> #102 <lista_de_expressoes1> ;
+<lista_de_expressoes1>::= î | "," <lista_de_expressoes> ;
 
 
 <selecao>::= pr_if <expressao> <lista_de_comandos> <else> pr_end ;
 <lista_de_comandos>::= <comando> ";" <lista_de_comandos1> ;
-<lista_de_comandos1>::= Ã® | <lista_de_comandos> ;
-<else>::= Ã® | pr_else <lista_de_comandos> ;
+<lista_de_comandos1>::= î | <lista_de_comandos> ;
+<else>::= î | pr_else <lista_de_comandos> ;
 
 <repeticao>::= pr_do <lista_de_comandos> pr_until <expressao> ;
 
 <expressao> ::= <valor> <expressao_> ;
-<expressao_> ::= Ã® | pr_and <valor> <expressao_> | pr_or <valor> <expressao_> ;
+<expressao_> ::= î | pr_and <valor> <expressao_> | pr_or <valor> <expressao_> ;
 <valor> ::= <relacional> | pr_true | pr_false | pr_not <valor> ;
 <relacional> ::= <aritmetica> <relacional_> ;
-<relacional_> ::= Ã® | <operador_relacional> <aritmetica> ;
+<relacional_> ::= î | <operador_relacional> <aritmetica> ;
 <operador_relacional>::= "==" | "~=" | "<" | ">" ;
 <aritmetica> ::= <termo> <aritmetica_> ;
-<aritmetica_> ::= Ã® | "+" <termo> <aritmetica_> | "-" <termo> <aritmetica_> ;
+<aritmetica_> ::= î | "+" <termo> <aritmetica_> | "-" <termo> <aritmetica_> ;
 <termo> ::= <fator> <termo_> ;
-<termo_> ::= Ã® | "*" <fator> <termo_> | "/" <fator> <termo_> ;
+<termo_> ::= î | "*" <fator> <termo_> | "/" <fator> <termo_> ;
 <fator> ::= identificador <fator_> |
- constanteInt |
- constanteFloat |
- constanteString |
+ constanteInt #103|
+ constanteFloat #104|
+ constanteString #105|
  "(" <expressao> ")" |
  "+" <fator> |
  "-" <fator> ;
-<fator_> ::= Ã® | pr_count | pr_size | pr_elementOf "(" <expressao> ")" ; 
+<fator_> ::= î | pr_count | pr_size | pr_elementOf "(" <expressao> ")" ; 
