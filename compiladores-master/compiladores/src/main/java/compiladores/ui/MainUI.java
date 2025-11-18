@@ -793,48 +793,6 @@ public class MainUI extends javax.swing.JFrame {
         return linha;
     }
 
-    private String validarComentariosChaves(String texto) {
-        ArrayDeque<Integer> pilha = new ArrayDeque<>();
-        boolean dentroString = false;
-        int linha = 1;
-
-        for (int i = 0; i < texto.length(); i++) {
-            char c = texto.charAt(i);
-
-            if (c == '\n') {
-                linha++;
-                continue;
-            }
-
-            if (c == '"') {
-                dentroString = !dentroString;
-                continue;
-            }
-            if (dentroString) {
-                continue;
-            }
-
-            if (c == '{') {
-                pilha.push(linha);
-                continue;
-            }
-
-            if (c == '}') {
-                if (pilha.isEmpty()) {
-                    return "linha " + linha + ": } comentário inválido ou não finalizado";
-                }
-                pilha.pop();
-            }
-        }
-
-        if (!pilha.isEmpty()) {
-            int linhaAbertura = pilha.peek();
-            return "linha " + linhaAbertura + ": comentário inválido ou não finalizado";
-        }
-
-        return null; // OK
-    }
-
     /**
      * @param args the command line arguments
      */
