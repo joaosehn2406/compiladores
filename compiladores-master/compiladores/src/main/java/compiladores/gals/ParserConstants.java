@@ -187,20 +187,20 @@ public interface ParserConstants {
                 "esperado tipo", //<dec_var> inválido",
                 "esperado identificador do if print read ", //<comando> inválido",
                 "esperado tipo", //<tipo> inválido",
-                "esperado bool float int string", //"<tipos> inválido",
+                "esperado tipo primitivo", //"<tipos> inválido",
                 "esperado identificador", //"<lista_de_identificadores> inválido",
                 "esperado list", //"<list_tipo> inválido",
-                "esperado identificador constante_int constante_float constante_string false not true + - (", // <elemento> inválido
-                "esperado identificador constante_int constante_float constante_string false not true + - (", // <posicao> inválido
+                "esperado expressao", // <elemento> inválido
+                "esperado expressao", // <posicao> inválido
                 "esperado read", // <entrada_dados> inválido,
                 "esperado identificador constante_string", //"<lista_de_entrada> inválido",
                 "esperado identificador constante_string", //"<constante_string> inválido",
                 "esperado print", //"<saida_dados> inválido",
                 "esperado expressão", //"<lista_de_expressoes> inválido",
-                "esperado expressão", //"<lista_de_expressoes1> inválido",
+                "esperado , )", //"<lista_de_expressoes1> inválido",
                 "esperado if", //"<selecao> inválido",
                 "esperado else end", //"<else> inválido",
-                "esperado expressão",//"<lista_de_comandos> inválido",
+                "esperado identificador do if print read",//"<lista_de_comandos> inválido",
                 "esperado do", //"<repeticao> inválido",
                 "esperado expressão", //"<expressao> inválido",
                 "esperado expressão", //"<expressao_> inválido",
@@ -218,7 +218,7 @@ public interface ParserConstants {
                 "esperado ; ,", //"<lista_de_identificadores1> inválido",
                 "esperado = <-", //"<atribuicao1> inválido",
                 "esperado ) ,", //"<lista_de_entrada1> inválido",
-                "esperado identificador do else end if print read", //"<lista_de_comandos1> inválido",
+                "esperado identificador do end else if print read until", //"<lista_de_comandos1> inválido",
                 "esperado add delete", //"<manipulacao1> inválido",
                 "esperado add delete = <-", //"<comando1> inválido"
             };

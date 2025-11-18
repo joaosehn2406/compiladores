@@ -1,13 +1,13 @@
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Constants.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\ScannerConstants.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\ui\NumberedBorder.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\ParserConstants.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\SemanticError.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Semantico.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\ui\MainUI.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\AnalysisError.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Sintatico.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\SyntaticError.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Lexico.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\LexicalError.java
-C:\Users\joaopedro\Documents\NetBeansProjects\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Token.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\LexicalError.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Lexico.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Sintatico.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\AnalysisError.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\SyntaticError.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Constants.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\ScannerConstants.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\ui\NumberedBorder.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\ParserConstants.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\SemanticError.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Token.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\ui\MainUI.java
+C:\Users\joaopedro\Documents\NetBeansProjects\compilador-equipe-07 (1)\compiladores-furb\compiladores\compiladores-master\compiladores\src\main\java\compiladores\gals\Semantico.java
