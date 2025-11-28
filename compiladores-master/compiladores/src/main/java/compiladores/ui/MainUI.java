@@ -28,12 +28,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.ActionEvent;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayDeque;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -480,6 +476,30 @@ public class MainUI extends javax.swing.JFrame {
         try {
             sintatico.parse(lexico, semantico);
             ta_log.setText("programa compilado com sucesso");
+
+            if (currentFile == null) {
+                ta_log.setText("ERRO: o arquivo deve ser salvo antes de compilar");
+                return;
+            }
+
+            String codigoIl = semantico.getCodigoGeradoS();
+
+            String nomeBaseArquivo = currentFile.getName();
+            int posicao = nomeBaseArquivo.lastIndexOf('.');
+            if (posicao > 0) nomeBaseArquivo = nomeBaseArquivo.substring(0, posicao);
+
+            File saida = new File(currentFile.getParentFile(), nomeBaseArquivo + ".il");
+
+            try (BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(saida), StandardCharsets.UTF_8))) {
+                w.write(codigoIl);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            ta_status.setText("Código objeto gerado em: " + saida.getAbsolutePath());
+
         } catch (LexicalError e) {
 
             ta_log.setText("linha " + getLinhaCompilador(codigo, e.getPosition()) + ": " + e.getMessage());
