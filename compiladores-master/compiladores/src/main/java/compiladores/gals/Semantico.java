@@ -65,30 +65,21 @@ public class Semantico implements Constants {
         }
     }
 
-    // ============================================================
-    // AÇÃO #100 - Cabeçalho do programa
-    // ============================================================
     private void acao100() {
         code.append(".assembly extern mscorlib {}\n")
                 .append(".assembly _programa{}\n")
                 .append(".module _programa.exe\n")
                 .append(".class public _unica{\n")
                 .append(".method static public void _principal(){\n")
-                .append(".entrypoint\n");  // CORRIGIDO: adicionado .entrypoint
+                .append(".entrypoint\n");
     }
 
-    // ============================================================
-    // AÇÃO #101 - Fim do programa
-    // ============================================================
     private void acao101() {
         code.append("ret\n")
                 .append("}\n")
                 .append("}\n");
     }
 
-    // ============================================================
-    // AÇÃO #102 - Print de expressão
-    // ============================================================
     private void acao102() {
         String t = pilha_tipos.pop();
         if ("int64".equals(t)) code.append("conv.i8\n");
@@ -100,40 +91,27 @@ public class Semantico implements Constants {
         code.append(")\n");
     }
 
-    // ============================================================
-    // AÇÃO #103 - Constante inteira
-    // ============================================================
     private void acao103(Token token) {
         pilha_tipos.push("int64");
         code.append("ldc.i8 ").append(token.getLexeme()).append("\n");
         code.append("conv.r8\n");
     }
 
-    // ============================================================
-    // AÇÃO #104 - Constante float
-    // ============================================================
     private void acao104(Token token) {
         pilha_tipos.push("float64");
         code.append("ldc.r8 ").append(token.getLexeme().replace(',', '.')).append("\n");
     }
 
-    // ============================================================
-    // AÇÃO #105 - Constante string
-    // ============================================================
     private void acao105(Token token) {
         pilha_tipos.push("string");
         code.append("ldstr ").append(token.getLexeme()).append("\n");
     }
 
-    // ============================================================
-    // AÇÃO #106 - Operador + (soma)
-    // ============================================================
     private void acao106() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
         String r;
 
-        // CORRIGIDO: Removidas conversões duplicadas
         if (("float64".equals(t1) && "int64".equals(t2)) ||
                 ("int64".equals(t1) && "float64".equals(t2)) ||
                 ("float64".equals(t1) && "float64".equals(t2))) {
@@ -151,15 +129,11 @@ public class Semantico implements Constants {
         pilha_tipos.push(r);
     }
 
-    // ============================================================
-    // AÇÃO #107 - Operador - (subtração)
-    // ============================================================
     private void acao107() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
         String r;
 
-        // CORRIGIDO: Removidas conversões duplicadas
         if (("float64".equals(t1) && "int64".equals(t2)) ||
                 ("int64".equals(t1) && "float64".equals(t2)) ||
                 ("float64".equals(t1) && "float64".equals(t2))) {
@@ -174,15 +148,11 @@ public class Semantico implements Constants {
         pilha_tipos.push(r);
     }
 
-    // ============================================================
-    // AÇÃO #108 - Operador * (multiplicação)
-    // ============================================================
     private void acao108() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
         String r;
 
-        // CORRIGIDO: Removidas conversões duplicadas
         if (("float64".equals(t1) && "int64".equals(t2)) ||
                 ("int64".equals(t1) && "float64".equals(t2)) ||
                 ("float64".equals(t1) && "float64".equals(t2))) {
@@ -197,15 +167,11 @@ public class Semantico implements Constants {
         pilha_tipos.push(r);
     }
 
-    // ============================================================
-    // AÇÃO #109 - Operador / (divisão)
-    // ============================================================
     private void acao109() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
         String r;
 
-        // CORRIGIDO: Removidas conversões duplicadas
         if (("float64".equals(t1) && "int64".equals(t2)) ||
                 ("int64".equals(t1) && "float64".equals(t2)) ||
                 ("float64".equals(t1) && "float64".equals(t2))) {
@@ -220,9 +186,6 @@ public class Semantico implements Constants {
         pilha_tipos.push(r);
     }
 
-    // ============================================================
-    // AÇÃO #110 - Operador unário - (negação)
-    // ============================================================
     private void acao110() throws SemanticError {
         String t = pilha_tipos.pop();
         if ("int64".equals(t) || "float64".equals(t)) {
@@ -235,21 +198,14 @@ public class Semantico implements Constants {
         }
     }
 
-    // ============================================================
-    // AÇÃO #111 - Guardar operador relacional
-    // ============================================================
     private void acao111(Token token) {
         operador_relacional = token.getLexeme();
     }
 
-    // ============================================================
-    // AÇÃO #112 - Executar operação relacional
-    // ============================================================
     private void acao112() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
 
-        // CORRIGIDO: Removidas conversões duplicadas (já feitas em #103 e #130)
         if ("==".equals(operador_relacional)) {
             code.append("ceq\n");
         } else if ("~=".equals(operador_relacional)) {
@@ -264,9 +220,6 @@ public class Semantico implements Constants {
         pilha_tipos.push("bool");
     }
 
-    // ============================================================
-    // AÇÃO #113 - Operador lógico AND
-    // ============================================================
     private void acao113() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
@@ -277,9 +230,6 @@ public class Semantico implements Constants {
         pilha_tipos.push("bool");
     }
 
-    // ============================================================
-    // AÇÃO #114 - Operador lógico OR
-    // ============================================================
     private void acao114() throws SemanticError {
         String t2 = pilha_tipos.pop();
         String t1 = pilha_tipos.pop();
@@ -290,25 +240,16 @@ public class Semantico implements Constants {
         pilha_tipos.push("bool");
     }
 
-    // ============================================================
-    // AÇÃO #115 - Constante TRUE
-    // ============================================================
     private void acao115() {
         pilha_tipos.push("bool");
         code.append("ldc.i4.1\n");
     }
 
-    // ============================================================
-    // AÇÃO #116 - Constante FALSE
-    // ============================================================
     private void acao116() {
         pilha_tipos.push("bool");
         code.append("ldc.i4.0\n");
     }
 
-    // ============================================================
-    // AÇÃO #117 - Operador lógico NOT
-    // ============================================================
     private void acao117() throws SemanticError {
         String t = pilha_tipos.pop();
         if (!"bool".equals(t)) {
@@ -319,25 +260,15 @@ public class Semantico implements Constants {
         pilha_tipos.push("bool");
     }
 
-    // ============================================================
-    // AÇÃO #118 - Quebra de linha do print
-    // ============================================================
     private void acao118() {
         code.append("ldstr \"\\n\"\n");
         code.append("call void [mscorlib]System.Console::Write(string)\n");
     }
 
-    // ============================================================
-    // AÇÃO #119 - Declaração de variáveis
-    // ============================================================
     private void acao119() {
-        // CORRIGIDO: Implementação completa!
-        // Para cada id da lista_identificadores
         for (String id : lista_identificadores) {
-            // Inserir o id na tabela_simbolos com o tipo guardado na ação #120
             tabela_simbolos.put(id, tipo);
 
-            // Gerar código objeto para declarar o id
             code.append(".locals (")
                     .append(tipo)
                     .append(" ")
@@ -345,13 +276,9 @@ public class Semantico implements Constants {
                     .append(")\n");
         }
 
-        // Limpar a lista_identificadores após o processamento
         lista_identificadores.clear();
     }
 
-    // ============================================================
-    // AÇÃO #120 - Guardar tipo
-    // ============================================================
     private void acao120(Token token) {
         String lex = token.getLexeme();
         if ("int".equals(lex)) tipo = "int64";
@@ -360,17 +287,11 @@ public class Semantico implements Constants {
         else if ("bool".equals(lex)) tipo = "bool";
     }
 
-    // ============================================================
-    // AÇÃO #121 - Guardar identificador
-    // ============================================================
     private void acao121(Token token) {
         String id = token.getLexeme();
         lista_identificadores.add(id);
     }
 
-    // ============================================================
-    // AÇÃO #122 - Atribuição
-    // ============================================================
     private void acao122() throws SemanticError {
         String tExp = pilha_tipos.pop();
         String id = lista_identificadores.get(lista_identificadores.size() - 1);
@@ -390,9 +311,6 @@ public class Semantico implements Constants {
         lista_identificadores.clear();
     }
 
-    // ============================================================
-    // AÇÃO #123 - Comando read
-    // ============================================================
     private void acao123(Token token) throws SemanticError {
         String id = token.getLexeme();
         String t = tabela_simbolos.get(id);
@@ -400,7 +318,6 @@ public class Semantico implements Constants {
             throw new SemanticError("identificador não declarado: " + id, token.getPosition());
         }
         if ("bool".equals(t)) {
-            // CORRIGIDO: Mensagem conforme especificação
             throw new SemanticError(id + " inválido para comando de entrada", token.getPosition());
         }
         code.append("call string [mscorlib]System.Console::ReadLine()\n");
@@ -412,18 +329,12 @@ public class Semantico implements Constants {
         code.append("stloc ").append(id).append("\n");
     }
 
-    // ============================================================
-    // AÇÃO #124 - Constante string em read
-    // ============================================================
     private void acao124(Token token) {
         String s = token.getLexeme();
         code.append("ldstr ").append(s).append("\n");
         code.append("call void [mscorlib]System.Console::Write(string)\n");
     }
 
-    // ============================================================
-    // AÇÃO #125 - Início do IF
-    // ============================================================
     private void acao125(Token token) throws SemanticError {
         String t = pilha_tipos.pop();
         if (!"bool".equals(t))
@@ -433,17 +344,11 @@ public class Semantico implements Constants {
         pilha_rotulos.push(L1);
     }
 
-    // ============================================================
-    // AÇÃO #126 - Fim do IF/ELSE
-    // ============================================================
     private void acao126() {
         String L = pilha_rotulos.pop();
         code.append(L).append(":\n");
     }
 
-    // ============================================================
-    // AÇÃO #127 - ELSE
-    // ============================================================
     private void acao127() {
         String L2 = novoRotulo();
         code.append("br ").append(L2).append("\n");
@@ -452,18 +357,12 @@ public class Semantico implements Constants {
         pilha_rotulos.push(L2);
     }
 
-    // ============================================================
-    // AÇÃO #128 - Início do DO
-    // ============================================================
     private void acao128() {
         String L = novoRotulo();
         code.append(L).append(":\n");
         pilha_rotulos.push(L);
     }
 
-    // ============================================================
-    // AÇÃO #129 - Fim do DO/UNTIL
-    // ============================================================
     private void acao129(Token token) throws SemanticError {
         String t = pilha_tipos.pop();
         if (!"bool".equals(t))
@@ -472,9 +371,6 @@ public class Semantico implements Constants {
         code.append("brfalse ").append(L).append("\n");
     }
 
-    // ============================================================
-    // AÇÃO #130 - Carregar identificador
-    // ============================================================
     private void acao130(Token token) throws SemanticError {
         String id = token.getLexeme();
         String ilType = tabela_simbolos.get(id);
@@ -485,9 +381,6 @@ public class Semantico implements Constants {
         if ("int64".equals(ilType)) code.append("conv.r8\n");
     }
 
-    // ============================================================
-    // MÉTODO PÚBLICO - Retornar código gerado
-    // ============================================================
     public String getCodigoGeradoS() {
         return code.toString();
     }
