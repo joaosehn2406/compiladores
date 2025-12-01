@@ -501,9 +501,19 @@ public class MainUI extends javax.swing.JFrame {
             ta_status.setText("Código objeto gerado em: " + saida.getAbsolutePath());
 
         } catch (LexicalError e) {
+            int linha = getLinhaCompilador(codigo, e.getPosition());
+            String mensagem = e.getMessage();
 
-            ta_log.setText("linha " + getLinhaCompilador(codigo, e.getPosition()) + ": " + e.getMessage());
-
+            if (mensagem.equals("símbolo inválido")) {
+                if (e.getPosition() >= 0 && e.getPosition() < codigo.length()) {
+                    char simbolo = codigo.charAt(e.getPosition());
+                    ta_log.setText("linha " + linha + ": " + simbolo + " " + mensagem);
+                } else {
+                    ta_log.setText("linha " + linha + ": " + mensagem);
+                }
+            } else {
+                ta_log.setText("linha " + linha + ": " + mensagem);
+            }
         } catch (SyntaticError e) {
             String resultadoEncontrado;
             String resultadoEsperado = null;
@@ -590,7 +600,8 @@ public class MainUI extends javax.swing.JFrame {
 
             ta_log.setText("linha " + linhaErro + ": encontrado " + resultadoEncontrado + " " + resultadoEsperado);
         } catch (SemanticError e) {
-            // trata erros semânticos na parte 4
+            int linhaErro = getLinhaCompilador(codigo, e.getPosition());
+            ta_log.setText("linha " + linhaErro + ": " + e.getMessage());
         }
 
     }//GEN-LAST:event_bt_compilarActionPerformed
