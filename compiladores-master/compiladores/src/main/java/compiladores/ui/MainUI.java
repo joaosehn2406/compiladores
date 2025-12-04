@@ -30,7 +30,6 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -600,8 +599,9 @@ public class MainUI extends javax.swing.JFrame {
 
             ta_log.setText("linha " + linhaErro + ": encontrado " + resultadoEncontrado + " " + resultadoEsperado);
         } catch (SemanticError e) {
-            int linhaErro = getLinhaCompilador(codigo, e.getPosition());
-            ta_log.setText("linha " + linhaErro + ": " + e.getMessage());
+            int linha = getLinhaCompilador(codigo, e.getPosition());
+            String mensagem = e.getMessage();
+            ta_log.setText("linha " + linha + ": " + mensagem);
         }
 
     }//GEN-LAST:event_bt_compilarActionPerformed
