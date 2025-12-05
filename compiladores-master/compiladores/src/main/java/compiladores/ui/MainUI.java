@@ -509,8 +509,14 @@ public class MainUI extends javax.swing.JFrame {
                 ta_log.setText("linha " + linha + ": " + mensagem);
             }
         } catch (SyntaticError e) {
-            lexico.setInput(codigo);
+            String resultadoEncontrado;
+            String resultadoEsperado = null;
 
+            int posElementoErro = -1;
+            String mensagemErroSintatico = e.getMessage();
+            String mensagemErroSintaticoLC = mensagemErroSintatico.toLowerCase();
+            int linhaErro = getLinhaCompilador(codigo, e.getPosition());
+            lexico.setInput(codigo);
             while (true) {
                 try {
                     token = lexico.nextToken();
@@ -521,47 +527,72 @@ public class MainUI extends javax.swing.JFrame {
                 }
             }
 
-            String encontradoStr;
             if (token == null || "$".equals(token.getLexeme())) {
-                encontradoStr = "EOF";
+                resultadoEncontrado = "EOF";
             } else if (token.getId() == Constants.t_constanteString) {
-                encontradoStr = "constante_string";
+                resultadoEncontrado = "constante_string";
             } else {
-                encontradoStr = token.getLexeme();
+                resultadoEncontrado = token.getLexeme();
             }
 
-            String mensagemEsperado = e.getMessage();
-            String mensagemLC = mensagemEsperado != null ? mensagemEsperado.toLowerCase() : "";
-
-            if (mensagemLC.matches(".*<(expressao|expressao_|valor|relacional|relacional_|aritmetica|aritmetica_|termo|termo_|fator|fator_)>.*")) {
-                mensagemEsperado = "esperado expressÃ£o";
-            } else if (mensagemLC.contains("<lista_de_entrada1>") || mensagemLC.contains("lista_de_entrada") ||
-                    (encontradoStr.equals("if") && (mensagemLC.contains("esperado =") || mensagemLC.contains("esperado <-")))) {
-                mensagemEsperado = "esperado , )";
-            } else if (mensagemLC.contains("<programa>")) {
-                mensagemEsperado = "esperado begin";
-            } else if (mensagemLC.contains("<lista_de_instrucoes>") || mensagemLC.contains("<lista_de_instrucoes1>")) {
-                mensagemEsperado = "esperado identificador do list if print read tipo";
-            } else if (mensagemLC.contains("<tipo>") || mensagemLC.contains("<tipos>")) {
-                mensagemEsperado = "esperado tipo";
-            } else if (mensagemLC.contains("<list_tipo>")) {
-                mensagemEsperado = "esperado list";
-            } else if (mensagemLC.contains("<lista_de_identificadores>")) {
-                mensagemEsperado = "esperado identificador";
-            } else if (mensagemLC.contains("atribuicao") || mensagemLC.contains("manipulacao")) {
-                mensagemEsperado = "esperado = <- add delete";
+            for (int i = 0; i < ParserConstants.PARSER_ERROR.length; i++) {
+                if (ParserConstants.PARSER_ERROR[i] != null && ParserConstants.PARSER_ERROR[i].equals(mensagemErroSintatico)) {
+                    posElementoErro = i;
+                    break;
+                }
             }
 
-            if (mensagemEsperado == null || mensagemEsperado.trim().isEmpty()) {
-                mensagemEsperado = "esperado";
+            StringBuilder sb = new StringBuilder();
+            if (posElementoErro >= ParserConstants.FIRST_NON_TERMINAL) {
+                if (mensagemErroSintaticoLC.contains("<programa>")) {
+                    resultadoEsperado = "esperado begin";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_instrucoes>") || mensagemErroSintaticoLC.contains("<lista_de_instrucoes1>")) {
+                    resultadoEsperado = "esperado identificador do list if print read tipo";
+                } else if (mensagemErroSintaticoLC.contains("<tipo>") || mensagemErroSintaticoLC.contains("<tipos>")) {
+                    resultadoEsperado = "esperado tipo";
+                } else if (mensagemErroSintaticoLC.contains("<list_tipo>")) {
+                    resultadoEsperado = "esperado list";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_identificadores>")) {
+                    resultadoEsperado = "esperado identificador";
+                } else if (mensagemErroSintaticoLC.contains("atribuicao") || mensagemErroSintaticoLC.contains("manipulacao")) {
+                    resultadoEsperado = "esperado = <- add delete";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_entrada1>")) {
+                    resultadoEsperado = "esperado , )";
+                } else if (mensagemErroSintaticoLC.matches(".*<(expressao|expressao_|valor|relacional|relacional_|aritmetica|aritmetica_|termo|termo_|fator|fator_)>.*")) {
+                    resultadoEsperado = "esperado expressão";
+                } else {
+                    int linha = posElementoErro - ParserConstants.FIRST_NON_TERMINAL;
+                    if (linha >= 0 && linha < ParserConstants.PARSER_TABLE.length) {
+                        for (int j = 1; j <= ParserConstants.PARSER_TABLE[linha].length; j++) {
+                            if (ParserConstants.PARSER_TABLE[linha][j - 1] != -1) {
+                                String name = nameHelper(j);
+                                if (name == null || name.isEmpty()) {
+                                    if (j < ParserConstants.PARSER_ERROR.length) {
+                                        name = ParserConstants.PARSER_ERROR[j];
+                                    } else {
+                                        name = String.valueOf(j);
+                                    }
+                                }
+                                if (sb.length() > 0) {
+                                    sb.append(" ");
+                                }
+                                sb.append(name);
+                            }
+                        }
+                    }
+                    if (sb.length() > 0) {
+                        resultadoEsperado = "esperado " + sb.toString();
+                    }
+                }
+            } else if (posElementoErro > 0) {
+                resultadoEsperado = mensagemErroSintatico.startsWith("esperado") ? mensagemErroSintatico : ("esperado " + mensagemErroSintatico);
             }
 
-            if (!mensagemEsperado.startsWith("esperado")) {
-                mensagemEsperado = "esperado " + mensagemEsperado;
+            if (resultadoEsperado == null || resultadoEsperado.trim().isEmpty()) {
+                resultadoEsperado = "esperado";
             }
 
-            int linha = getLinhaCompilador(codigo, e.getPosition());
-            ta_log.setText("linha " + linha + ": encontrado " + encontradoStr + " " + mensagemEsperado);
+            ta_log.setText("linha " + linhaErro + ": encontrado " + resultadoEncontrado + " " + resultadoEsperado);
         } catch (SemanticError e) {
             int linha = getLinhaCompilador(codigo, e.getPosition());
             String mensagem = e.getMessage();
