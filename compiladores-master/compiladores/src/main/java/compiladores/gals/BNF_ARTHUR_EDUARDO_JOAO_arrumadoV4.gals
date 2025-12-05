@@ -194,4 +194,4 @@ pr_until = identificador: "until"
  "(" <expressao> ")" |
  "+" <fator> |
  "-" <fator> #110 ;
-<fator_> ::= î | pr_count | pr_size | pr_elementOf "(" <expressao> ")" ;
+<fator_> ::= î | pr_count | pr_size | pr_elementOf "(" <expressao>")";
