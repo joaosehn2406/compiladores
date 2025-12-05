@@ -509,36 +509,90 @@ public class MainUI extends javax.swing.JFrame {
                 ta_log.setText("linha " + linha + ": " + mensagem);
             }
         } catch (SyntaticError e) {
-            lexico.setInput(ta_editor.getText());
+            String resultadoEncontrado;
+            String resultadoEsperado = null;
 
+            int posElementoErro = -1;
+            String mensagemErroSintatico = e.getMessage();
+            String mensagemErroSintaticoLC = mensagemErroSintatico.toLowerCase();
+            int linhaErro = getLinhaCompilador(codigo, e.getPosition());
+            lexico.setInput(codigo);
             while (true) {
                 try {
                     token = lexico.nextToken();
-                    if(!(token != null && token.getPosition() < e.getPosition())){
+                    if (!(token != null && token.getPosition() < e.getPosition())) {
                         break;
                     }
                 } catch (LexicalError ex) {
-                    throw new RuntimeException(ex);
                 }
             }
-            String encontradoStr;
-            if (token == null) {
-                encontradoStr = "EOF";
-            } else {
-                if (token.getId() == t_constanteString) {
-                    encontradoStr = "constante_string";
-                }
-                else if ("$".equals(token.getLexeme())) {
-                    encontradoStr = "EOF";
-                }
-                else {
-                    encontradoStr = token.getLexeme();
-                }
-            }
-            String mensagemErro = "linha " + getLinhaCompilador(ta_editor.getText(), e.getPosition())
-                    + ": encontrado " + encontradoStr + " " + e.getMessage();
 
-            ta_log.setText(mensagemErro);
+            if (token == null || "$".equals(token.getLexeme())) {
+                resultadoEncontrado = "EOF";
+            } else if (token.getId() == Constants.t_constanteString) {
+                resultadoEncontrado = "constante_string";
+            } else {
+                resultadoEncontrado = token.getLexeme();
+            }
+
+            for (int i = 0; i < ParserConstants.PARSER_ERROR.length; i++) {
+                if (ParserConstants.PARSER_ERROR[i] != null && ParserConstants.PARSER_ERROR[i].equals(mensagemErroSintatico)) {
+                    posElementoErro = i;
+                    break;
+                }
+            }
+
+            StringBuilder sb = new StringBuilder();
+            if (posElementoErro >= ParserConstants.FIRST_NON_TERMINAL) {
+                if (mensagemErroSintaticoLC.contains("<programa>")) {
+                    resultadoEsperado = "esperado begin";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_instrucoes>") || mensagemErroSintaticoLC.contains("<lista_de_instrucoes1>")) {
+                    resultadoEsperado = "esperado identificador do list if print read tipo";
+                } else if (mensagemErroSintaticoLC.contains("<tipo>") || mensagemErroSintaticoLC.contains("<tipos>")) {
+                    resultadoEsperado = "esperado tipo";
+                } else if (mensagemErroSintaticoLC.contains("<list_tipo>")) {
+                    resultadoEsperado = "esperado list";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_identificadores>")) {
+                    resultadoEsperado = "esperado identificador";
+                } else if (mensagemErroSintaticoLC.contains("atribuicao") || mensagemErroSintaticoLC.contains("manipulacao")) {
+                    resultadoEsperado = "esperado = <- add delete";
+                } else if (mensagemErroSintaticoLC.contains("<lista_de_entrada1>")) {
+                    resultadoEsperado = "esperado , )";
+                } else if (mensagemErroSintaticoLC.matches(".*<(expressao|expressao_|valor|relacional|relacional_|aritmetica|aritmetica_|termo|termo_|fator|fator_)>.*")) {
+                    resultadoEsperado = "esperado expressão";
+                } else {
+                    int linha = posElementoErro - ParserConstants.FIRST_NON_TERMINAL;
+                    if (linha >= 0 && linha < ParserConstants.PARSER_TABLE.length) {
+                        for (int j = 1; j <= ParserConstants.PARSER_TABLE[linha].length; j++) {
+                            if (ParserConstants.PARSER_TABLE[linha][j - 1] != -1) {
+                                String name = nameHelper(j);
+                                if (name == null || name.isEmpty()) {
+                                    if (j < ParserConstants.PARSER_ERROR.length) {
+                                        name = ParserConstants.PARSER_ERROR[j];
+                                    } else {
+                                        name = String.valueOf(j);
+                                    }
+                                }
+                                if (sb.length() > 0) {
+                                    sb.append(" ");
+                                }
+                                sb.append(name);
+                            }
+                        }
+                    }
+                    if (sb.length() > 0) {
+                        resultadoEsperado = "esperado " + sb.toString();
+                    }
+                }
+            } else if (posElementoErro > 0) {
+                resultadoEsperado = mensagemErroSintatico.startsWith("esperado") ? mensagemErroSintatico : ("esperado " + mensagemErroSintatico);
+            }
+
+            if (resultadoEsperado == null || resultadoEsperado.trim().isEmpty()) {
+                resultadoEsperado = "esperado";
+            }
+
+            ta_log.setText("linha " + linhaErro + ": encontrado " + resultadoEncontrado + " " + resultadoEsperado);
         } catch (SemanticError e) {
             int linha = getLinhaCompilador(codigo, e.getPosition());
             String mensagem = e.getMessage();

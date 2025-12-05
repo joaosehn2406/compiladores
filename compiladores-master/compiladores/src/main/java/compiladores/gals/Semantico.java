@@ -78,8 +78,11 @@ public class Semantico implements Constants {
 
     private void acao103(Token token) {
         pilhaTipos.push("int64");
-        codigo.append ("ldc.i8 " + token.getLexeme() + "\n");
-        codigo.append ("conv.r8");
+
+        codigo.append("ldc.i8 ")
+                .append(token.getLexeme())
+                .append("\n")
+                .append("conv.r8\n");
     }
 
     private void acao104(Token token) {
