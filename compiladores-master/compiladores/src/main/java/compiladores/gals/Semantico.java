@@ -6,20 +6,12 @@ public class Semantico implements Constants {
 
     private final Stack<String> pilhaTipos = new Stack<>();
     private final Stack<String> pilhaRotulos = new Stack<>();
-    private final List<String> listaIdentificadores = new ArrayList<>();
-    private final Map<String, String> tabelaSimbolos = new LinkedHashMap<>();
+    private final List<String> listaIds = new ArrayList<>();
     private String tipo = "";
     private String operadorRelacional = "";
     private final StringBuilder codigo = new StringBuilder();
     private int contadorRotulos = 1;
-
-    public String getCodigoGeradoS() {
-        return codigo.toString();
-    }
-
-    private String gerarNovoRotulo() {
-        return "L" + (contadorRotulos++);
-    }
+    private final Map<String, String> tabelaDeSimbolos = new LinkedHashMap<>();
 
     public void executeAction(int action, Token token) throws SemanticError {
         switch (action) {
@@ -224,23 +216,15 @@ public class Semantico implements Constants {
     }
 
     private void acao119() {
-        for (String id : listaIdentificadores) {
-            String tipoIL = "";
+        for (String id : listaIds) {
+            String tipoIL = switch (tipo) {
+                case "int" -> "int64";
+                case "float" -> "float64";
+                case "string", "bool" -> tipo;
+                default -> "";
+            };
 
-            switch (tipo) {
-                case "int":
-                    tipoIL = "int64";
-                    break;
-                case "float":
-                    tipoIL = "float64";
-                    break;
-                case "string":
-                case "bool":
-                    tipoIL = tipo;
-                    break;
-            }
-
-            tabelaSimbolos.put(id, tipoIL);
+            tabelaDeSimbolos.put(id, tipoIL);
 
             codigo.append(".locals(")
                     .append(tipoIL)
@@ -249,7 +233,7 @@ public class Semantico implements Constants {
                     .append(")\n");
         }
 
-        listaIdentificadores.clear();
+        listaIds.clear();
     }
 
     private void acao120(Token token) {
@@ -257,7 +241,7 @@ public class Semantico implements Constants {
     }
 
     private void acao121(Token token) {
-        listaIdentificadores.add(token.getLexeme());
+        listaIds.add(token.getLexeme());
     }
 
     private void acao122() {
@@ -267,18 +251,18 @@ public class Semantico implements Constants {
             codigo.append("conv.i8\n");
         }
 
-        String id = listaIdentificadores.get(listaIdentificadores.size() - 1);
+        String id = listaIds.get(listaIds.size() - 1);
 
         codigo.append("stloc ")
                 .append(id)
                 .append("\n");
 
-        listaIdentificadores.clear();
+        listaIds.clear();
     }
 
     private void acao123(Token token) throws SemanticError {
         String id = token.getLexeme();
-        String type = tabelaSimbolos.get(id);
+        String type = tabelaDeSimbolos.get(id);
 
         if (type.equals("bool")) {
             throw new SemanticError(id + " inválido para comando de entrada", token.getPosition());
@@ -357,7 +341,7 @@ public class Semantico implements Constants {
 
     private void acao130(Token token) {
         String id = token.getLexeme();
-        String type = tabelaSimbolos.get(id);
+        String type = tabelaDeSimbolos.get(id);
 
         pilhaTipos.push(type);
 
@@ -366,5 +350,13 @@ public class Semantico implements Constants {
         if (type.equals("int64")) {
             codigo.append("conv.r8\n");
         }
+    }
+
+    public String getCodigoGeradoS() {
+        return codigo.toString();
+    }
+
+    private String gerarNovoRotulo() {
+        return "L" + (contadorRotulos++);
     }
 }

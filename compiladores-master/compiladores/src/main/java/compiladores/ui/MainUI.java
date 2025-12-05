@@ -476,11 +476,6 @@ public class MainUI extends javax.swing.JFrame {
             sintatico.parse(lexico, semantico);
             ta_log.setText("programa compilado com sucesso");
 
-            if (currentFile == null) {
-                ta_log.setText("ERRO: o arquivo deve ser salvo antes de compilar");
-                return;
-            }
-
             String codigoIl = semantico.getCodigoGeradoS();
 
             String nomeBaseArquivo = currentFile.getName();
